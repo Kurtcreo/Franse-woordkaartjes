@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Franse draaikaartjes</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #0f172a;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px 48px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 42px;
+      }
+
+      .header p {
+        max-width: 720px;
+        margin: 12px auto 0;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #475569;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+      }
+
+      .card-wrap {
+        perspective: 1000px;
+      }
+
+      .card {
+        position: relative;
+        width: 100%;
+        height: 288px;
+        transform-style: preserve-3d;
+        transition: transform 0.7s;
+        cursor: pointer;
+      }
+
+      .card.flipped {
+        transform: rotateY(180deg);
+      }
+
+      .face {
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        backface-visibility: hidden;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+      }
+
+      .front {
+        background: white;
+        border: 1px solid #e2e8f0;
+      }
+
+      .back {
+        background: #0f172a;
+        color: white;
+        border: 1px solid #1e293b;
+        transform: rotateY(180deg);
+      }
+
+      .badge-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .front .badge {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      .back .badge {
+        background: rgba(255, 255, 255, 0.1);
+        color: #f8fafc;
+      }
+
+      .hint {
+        font-size: 14px;
+        color: #94a3b8;
+      }
+
+      .back .hint {
+        color: #cbd5e1;
+      }
+
+      .word {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 44px;
+        font-weight: bold;
+      }
+
+      .listen-btn {
+        border: none;
+        border-radius: 16px;
+        padding: 14px 18px;
+        background: white;
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .listen-btn:hover {
+        transform: scale(1.03);
+      }
+
+      .tests {
+        margin-top: 40px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      }
+
+      .tests h2 {
+        margin: 0 0 8px;
+        font-size: 26px;
+      }
+
+      .tests p {
+        margin: 0 0 20px;
+        color: #475569;
+      }
+
+      .test-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .test-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 14px 16px;
+      }
+
+      .status {
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .success {
+        background: #dcfce7;
+        color: #15803d;
+      }
+
+      .warning {
+        background: #fef3c7;
+        color: #b45309;
+      }
+
+      .error {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      @media (max-width: 640px) {
+        .header h1 {
+          font-size: 32px;
+        }
+
+        .word {
+          font-size: 34px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Franse draaikaartjes</h1>
+        <p>
+          Klik op een kaartje om het om te draaien. Eerst zie je het Nederlandse woord,
+          daarna het Franse woord. Gebruik daarna de luisterknop om de Franse uitspraak
+          te horen.
+        </p>
+      </div>
+
+      <div id="cards" class="grid"></div>
+
+      <section class="tests">
+        <h2>Controles</h2>
+        <p>Ingebouwde checks voor de kaartjes en luisterfunctie.</p>
+        <div id="tests" class="test-list"></div>
+      </section>
+    </div>
+
+    <script>
+      const woorden = [
+        { nl: "huis", fr: "maison" },
+        { nl: "kat", fr: "chat" },
+        { nl: "brood", fr: "pain" },
+        { nl: "school", fr: "école" },
+        { nl: "water", fr: "eau" },
+        { nl: "boom", fr: "arbre" },
+        { nl: "auto", fr: "voiture" },
+        { nl: "zon", fr: "soleil" },
+        { nl: "maan", fr: "lune" },
+        { nl: "boek", fr: "livre" }
+      ];
+
+      const testCases = [
+        {
+          naam: "Er zijn precies 10 kaartjes",
+          check: (items) => items.length === 10,
+        },
+        {
+          naam: "Elk kaartje heeft een Nederlands woord",
+          check: (items) => items.every((item) => typeof item.nl === "string" && item.nl.trim().length > 0),
+        },
+        {
+          naam: "Elk kaartje heeft een Frans woord",
+          check: (items) => items.every((item) => typeof item.fr === "string" && item.fr.trim().length > 0),
+        },
+        {
+          naam: "Nederlandse woorden zijn uniek",
+          check: (items) => new Set(items.map((item) => item.nl)).size === items.length,
+        },
+        {
+          naam: "Franse woorden zijn uniek",
+          check: (items) => new Set(items.map((item) => item.fr)).size === items.length,
+        },
+      ];
+
+      function speakFrench(text) {
+        if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") {
+          alert("Je browser ondersteunt geen luisteroptie.");
+          return;
+        }
+
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "fr-FR";
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function maakKaart(woord) {
+        const wrap = document.createElement("div");
+        wrap.className = "card-wrap";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", `Draai kaartje voor ${woord.nl}`);
+
+        card.innerHTML = `
+          <div class="face front">
+            <div class="badge-row">
+              <span class="badge">Nederlands</span>
+              <span class="hint">Klik om te draaien</span>
+            </div>
+            <div class="word">${woord.nl}</div>
+          </div>
+          <div class="face back">
+            <div class="badge-row">
+              <span class="badge">Français</span>
+              <span class="hint">Klik om terug te draaien</span>
+            </div>
+            <div class="word">${woord.fr}</div>
+            <div style="text-align:center;">
+              <button class="listen-btn" type="button">🔊 Luister naar ${woord.fr}</button>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          card.classList.toggle("flipped");
+        });
+
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            card.classList.toggle("flipped");
+          }
+        });
+
+        const luisterKnop = card.querySelector(".listen-btn");
+        luisterKnop.addEventListener("click", (event) => {
+          event.stopPropagation();
+          speakFrench(woord.fr);
+        });
+
+        wrap.appendChild(card);
+        return wrap;
+      }
+
+      function renderCards() {
+        const cardsContainer = document.getElementById("cards");
+        woorden.forEach((woord) => {
+          cardsContainer.appendChild(maakKaart(woord));
+        });
+      }
+
+      function renderTests() {
+        const testsContainer = document.getElementById("tests");
+
+        testCases.forEach((test) => {
+          const geslaagd = Boolean(test.check(woorden));
+          const item = document.createElement("div");
+          item.className = "test-item";
+          item.innerHTML = `
+            <span>${test.naam}</span>
+            <span class="status ${geslaagd ? "success" : "error"}">${geslaagd ? "Geslaagd" : "Mislukt"}</span>
+          `;
+          testsContainer.appendChild(item);
+        });
+
+        const audioBeschikbaar = "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
+        const audioItem = document.createElement("div");
+        audioItem.className = "test-item";
+        audioItem.innerHTML = `
+          <span>Browser ondersteunt luisteroptie</span>
+          <span class="status ${audioBeschikbaar ? "success" : "warning"}">${audioBeschikbaar ? "Beschikbaar" : "Niet beschikbaar"}</span>
+        `;
+        testsContainer.appendChild(audioItem);
+      }
+
+      renderCards();
+      renderTests();
+    </script>
+  </body>
+</html>
