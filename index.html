@@ -1,373 +1,777 @@
 <!DOCTYPE html>
 <html lang="nl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Franse draaikaartjes</title>
-    <style>
-      * {
-        box-sizing: border-box;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oefen Franse woorden</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #eff6ff;
+      color: #12335f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 820px;
+      background: white;
+      border: 1px solid #dbeafe;
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
+      padding: 32px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: #1e3a8a;
+      font-size: 32px;
+    }
+
+    p {
+      color: #1d4ed8;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    button:disabled {
+      cursor: default;
+      opacity: 0.65;
+    }
+
+    .btn {
+      border-radius: 14px;
+      padding: 14px 22px;
+      font-weight: 700;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .btn-blue {
+      background: #1d4ed8;
+      color: white;
+      box-shadow: 0 8px 18px rgba(29, 78, 216, 0.25);
+    }
+
+    .btn-blue:hover {
+      background: #1e40af;
+    }
+
+    .btn-yellow {
+      background: #facc15;
+      color: #172554;
+      box-shadow: 0 8px 18px rgba(250, 204, 21, 0.25);
+    }
+
+    .btn-yellow:hover {
+      background: #fde047;
+    }
+
+    .btn-outline {
+      background: white;
+      color: #1e3a8a;
+      border: 1px solid #bfdbfe;
+    }
+
+    .btn-outline:hover {
+      background: #eff6ff;
+      border-color: #60a5fa;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .theme-button {
+      border-radius: 16px;
+      border: 1px solid #bfdbfe;
+      background: white;
+      color: #172554;
+      font-weight: 700;
+      padding: 18px;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+      transition: 0.2s;
+    }
+
+    .theme-button:hover {
+      background: #eff6ff;
+      border-color: #60a5fa;
+      transform: translateY(-1px);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      color: #1d4ed8;
+      font-size: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .link-button {
+      background: transparent;
+      color: #1d4ed8;
+      text-decoration: underline;
+      font-size: 14px;
+      padding: 0;
+    }
+
+    .progress {
+      width: 100%;
+      height: 16px;
+      background: #dbeafe;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #facc15;
+      transition: width 0.3s;
+    }
+
+    .card-wrap {
+      perspective: 1000px;
+      height: 230px;
+      width: 100%;
+      margin: 0 auto;
+      cursor: pointer;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+      border-radius: 22px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card-front {
+      background: white;
+      border: 2px solid #bfdbfe;
+    }
+
+    .card-back {
+      background: #1d4ed8;
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 13px;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .card-back .label {
+      color: #fde047;
+    }
+
+    .word {
+      font-size: 34px;
+      font-weight: 800;
+      color: #172554;
+      text-align: center;
+    }
+
+    .card-back .word {
+      color: white;
+    }
+
+    .hint {
+      margin-top: 18px;
+      color: #3b82f6;
+      font-size: 14px;
+    }
+
+    .card-back .hint {
+      color: #dbeafe;
+    }
+
+    .listen-btn {
+      margin-top: 18px;
+      border-radius: 12px;
+      background: #facc15;
+      color: #172554;
+      padding: 10px 16px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .question-box {
+      border: 2px solid #bfdbfe;
+      border-radius: 22px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .answer {
+      border: 2px solid #bfdbfe;
+      border-radius: 16px;
+      background: white;
+      color: #172554;
+      padding: 16px;
+      transition: 0.2s;
+    }
+
+    .answer:hover {
+      background: #eff6ff;
+      border-color: #60a5fa;
+    }
+
+    .answer.good {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #14532d;
+    }
+
+    .answer.bad {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #7f1d1d;
+    }
+
+    .answer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .answer-choice {
+      flex: 1;
+      background: transparent;
+      color: inherit;
+      font-weight: 800;
+      text-align: left;
+      font-size: 16px;
+    }
+
+    .feedback {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 16px;
+      font-weight: 700;
+    }
+
+    .feedback.good {
+      background: #dcfce7;
+      color: #14532d;
+    }
+
+    .feedback.bad {
+      background: #fee2e2;
+      color: #7f1d1d;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .score-badge {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: #facc15;
+      color: #172554;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        padding: 22px;
       }
 
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f1f5f9;
-        color: #0f172a;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 32px 24px 48px;
-      }
-
-      .header {
-        text-align: center;
-        margin-bottom: 32px;
-      }
-
-      .header h1 {
-        margin: 0;
-        font-size: 42px;
-      }
-
-      .header p {
-        max-width: 720px;
-        margin: 12px auto 0;
-        font-size: 18px;
-        line-height: 1.6;
-        color: #475569;
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 24px;
-      }
-
-      .card-wrap {
-        perspective: 1000px;
-      }
-
-      .card {
-        position: relative;
-        width: 100%;
-        height: 288px;
-        transform-style: preserve-3d;
-        transition: transform 0.7s;
-        cursor: pointer;
-      }
-
-      .card.flipped {
-        transform: rotateY(180deg);
-      }
-
-      .face {
-        position: absolute;
-        inset: 0;
-        border-radius: 24px;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        backface-visibility: hidden;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
-      }
-
-      .front {
-        background: white;
-        border: 1px solid #e2e8f0;
-      }
-
-      .back {
-        background: #0f172a;
-        color: white;
-        border: 1px solid #1e293b;
-        transform: rotateY(180deg);
-      }
-
-      .badge-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .badge {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 999px;
-        font-size: 14px;
-        font-weight: bold;
-      }
-
-      .front .badge {
-        background: #f1f5f9;
-        color: #475569;
-      }
-
-      .back .badge {
-        background: rgba(255, 255, 255, 0.1);
-        color: #f8fafc;
-      }
-
-      .hint {
-        font-size: 14px;
-        color: #94a3b8;
-      }
-
-      .back .hint {
-        color: #cbd5e1;
-      }
-
-      .word {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-size: 44px;
-        font-weight: bold;
-      }
-
-      .listen-btn {
-        border: none;
-        border-radius: 16px;
-        padding: 14px 18px;
-        background: white;
-        color: #0f172a;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .listen-btn:hover {
-        transform: scale(1.03);
-      }
-
-      .tests {
-        margin-top: 40px;
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 24px;
-        padding: 24px;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-      }
-
-      .tests h2 {
-        margin: 0 0 8px;
+      h1 {
         font-size: 26px;
       }
 
-      .tests p {
-        margin: 0 0 20px;
-        color: #475569;
+      .word {
+        font-size: 28px;
       }
 
-      .test-list {
-        display: grid;
-        gap: 12px;
+      .score-row {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <h1>Oefen Franse woorden</h1>
+    <div id="app-content"></div>
+  </main>
+
+  <script>
+    const themaWoorden = {
+      Basis: [
+        { fr: "Bonjour", nl: "Hallo / Goedendag" },
+        { fr: "Au revoir", nl: "Tot ziens" },
+        { fr: "Merci", nl: "Dank je" },
+        { fr: "Oui", nl: "Ja" },
+        { fr: "Non", nl: "Nee" },
+        { fr: "S’il vous plaît", nl: "Alstublieft" },
+        { fr: "Pardon", nl: "Sorry" },
+        { fr: "Excusez-moi", nl: "Neem me niet kwalijk" },
+        { fr: "Comment ça va?", nl: "Hoe gaat het?" },
+        { fr: "Ça va bien", nl: "Het gaat goed" }
+      ],
+      Voornaamwoorden: [
+        { fr: "Je", nl: "Ik" },
+        { fr: "Tu", nl: "Jij" },
+        { fr: "Il", nl: "Hij" },
+        { fr: "Elle", nl: "Zij" },
+        { fr: "Nous", nl: "Wij" },
+        { fr: "Vous", nl: "U / Jullie" },
+        { fr: "Ils", nl: "Zij (mannelijk meervoud)" },
+        { fr: "Elles", nl: "Zij (vrouwelijk meervoud)" }
+      ],
+      Cijfers: [
+        { fr: "Un", nl: "Een" },
+        { fr: "Deux", nl: "Twee" },
+        { fr: "Trois", nl: "Drie" },
+        { fr: "Quatre", nl: "Vier" },
+        { fr: "Cinq", nl: "Vijf" },
+        { fr: "Six", nl: "Zes" },
+        { fr: "Sept", nl: "Zeven" },
+        { fr: "Huit", nl: "Acht" },
+        { fr: "Neuf", nl: "Negen" },
+        { fr: "Dix", nl: "Tien" }
+      ],
+      Familie: [
+        { fr: "La famille", nl: "De familie" },
+        { fr: "Le père", nl: "De vader" },
+        { fr: "La mère", nl: "De moeder" },
+        { fr: "Le frère", nl: "De broer" },
+        { fr: "La sœur", nl: "De zus" },
+        { fr: "Le fils", nl: "De zoon" },
+        { fr: "La fille", nl: "De dochter" },
+        { fr: "Les parents", nl: "De ouders" },
+        { fr: "Le mari", nl: "De echtgenoot" },
+        { fr: "La femme", nl: "De echtgenote" }
+      ],
+      Dagen: [
+        { fr: "Lundi", nl: "Maandag" },
+        { fr: "Mardi", nl: "Dinsdag" },
+        { fr: "Mercredi", nl: "Woensdag" },
+        { fr: "Jeudi", nl: "Donderdag" },
+        { fr: "Vendredi", nl: "Vrijdag" },
+        { fr: "Samedi", nl: "Zaterdag" },
+        { fr: "Dimanche", nl: "Zondag" }
+      ],
+      Eten_en_drinken: [
+        { fr: "Le pain", nl: "Het brood" },
+        { fr: "Le fromage", nl: "De kaas" },
+        { fr: "Le lait", nl: "De melk" },
+        { fr: "Le café", nl: "De koffie" },
+        { fr: "Le thé", nl: "De thee" },
+        { fr: "L’eau", nl: "Het water" },
+        { fr: "Le vin", nl: "De wijn" },
+        { fr: "Le poulet", nl: "De kip" },
+        { fr: "Le poisson", nl: "De vis" },
+        { fr: "Les légumes", nl: "De groenten" }
+      ],
+      Restaurant: [
+        { fr: "Je voudrais…", nl: "Ik zou graag… willen" },
+        { fr: "L’addition, s’il vous plaît", nl: "De rekening, alstublieft" },
+        { fr: "Le menu, s’il vous plaît", nl: "Het menu, alstublieft" },
+        { fr: "Quelle est la spécialité de la maison?", nl: "Wat is de specialiteit van het huis?" },
+        { fr: "Je suis végétarien(ne)", nl: "Ik ben vegetariër" }
+      ],
+      Vervoer_en_route: [
+        { fr: "La voiture", nl: "De auto" },
+        { fr: "Le bus", nl: "De bus" },
+        { fr: "Le train", nl: "De trein" },
+        { fr: "L’avion", nl: "Het vliegtuig" },
+        { fr: "Le bateau", nl: "De boot" },
+        { fr: "La gare", nl: "Het station" },
+        { fr: "L’aéroport", nl: "Het vliegveld" },
+        { fr: "Le taxi", nl: "De taxi" },
+        { fr: "La rue", nl: "De straat" },
+        { fr: "Le chemin", nl: "De weg" },
+        { fr: "Où est…?", nl: "Waar is…?" },
+        { fr: "Comment puis-je aller à…?", nl: "Hoe kom ik bij…?" },
+        { fr: "C’est loin?", nl: "Is het ver?" },
+        { fr: "Tournez à gauche", nl: "Sla linksaf" },
+        { fr: "Tournez à droite", nl: "Sla rechtsaf" },
+        { fr: "Allez tout droit", nl: "Ga rechtdoor" }
+      ]
+    };
+
+    const themaLabels = {
+      Basis: "Basis",
+      Voornaamwoorden: "Voornaamwoorden",
+      Cijfers: "Cijfers",
+      Familie: "Familie",
+      Dagen: "Dagen",
+      Eten_en_drinken: "Eten en drinken",
+      Restaurant: "Restaurant",
+      Vervoer_en_route: "Vervoer en route"
+    };
+
+    let gekozenThema = null;
+    let modus = null;
+    let woorden = [];
+    let index = 0;
+    let gekozenAntwoord = null;
+    let toonFeedback = false;
+    let score = 0;
+    let testKlaar = false;
+    let kaartOmgedraaid = false;
+
+    const app = document.getElementById("app-content");
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function spreekFrans(tekst) {
+      if (!("speechSynthesis" in window)) return;
+
+      window.speechSynthesis.cancel();
+      const bericht = new SpeechSynthesisUtterance(tekst);
+      bericht.lang = "fr-FR";
+      bericht.rate = 0.9;
+      window.speechSynthesis.speak(bericht);
+    }
+
+    function huidigeWoorden() {
+      if (modus === "test") return woorden.slice(0, Math.min(10, woorden.length));
+      return woorden;
+    }
+
+    function totaalVragen() {
+      return modus === "test" ? Math.min(10, woorden.length) : woorden.length;
+    }
+
+    function render() {
+      if (!gekozenThema) {
+        renderThemaKeuze();
+        return;
       }
 
-      .test-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        background: #f8fafc;
-        border-radius: 16px;
-        padding: 14px 16px;
+      if (!modus) {
+        renderModusKeuze();
+        return;
       }
 
-      .status {
-        border-radius: 999px;
-        padding: 6px 12px;
-        font-size: 12px;
-        font-weight: bold;
+      if (modus === "test" && testKlaar) {
+        renderEindscherm();
+        return;
       }
 
-      .success {
-        background: #dcfce7;
-        color: #15803d;
-      }
+      renderOefenenOfTest();
+    }
 
-      .warning {
-        background: #fef3c7;
-        color: #b45309;
-      }
+    function renderThemaKeuze() {
+      const themaNamen = Object.keys(themaWoorden);
+      app.innerHTML = `
+        <p>Kies eerst een thema.</p>
+        <div class="grid">
+          ${themaNamen.map(thema => `
+            <button class="theme-button" onclick="kiesThema('${thema}')">
+              ${themaLabels[thema]}
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
 
-      .error {
-        background: #fee2e2;
-        color: #b91c1c;
-      }
+    function renderModusKeuze() {
+      app.innerHTML = `
+        <p>Gekozen thema: <strong>${themaLabels[gekozenThema]}</strong></p>
+        <p>Wat wil je doen?</p>
+        <div class="button-row">
+          <button class="btn btn-blue" onclick="startFlashcards()">Oefenen</button>
+          <button class="btn btn-yellow" onclick="startTest()">Test</button>
+        </div>
+        <button class="link-button" style="margin-top:18px" onclick="terugNaarStart()">Kies een ander thema</button>
+      `;
+    }
 
-      @media (max-width: 640px) {
-        .header h1 {
-          font-size: 32px;
-        }
+    function renderOefenenOfTest() {
+      const lijst = huidigeWoorden();
+      const huidig = lijst[index];
+      const progress = Math.round(((index + 1) / lijst.length) * 100);
 
-        .word {
-          font-size: 34px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>Franse draaikaartjes</h1>
-        <p>
-          Klik op een kaartje om het om te draaien. Eerst zie je het Nederlandse woord,
-          daarna het Franse woord. Gebruik daarna de luisterknop om de Franse uitspraak
-          te horen.
-        </p>
-      </div>
+      app.innerHTML = `
+        <div class="topbar">
+          <span>Thema: ${themaLabels[gekozenThema]}</span>
+          <button class="link-button" onclick="terugNaarStart()">Terug naar start</button>
+        </div>
 
-      <div id="cards" class="grid"></div>
+        <div class="progress">
+          <div class="progress-fill" style="width:${progress}%"></div>
+        </div>
 
-      <section class="tests">
-        <h2>Controles</h2>
-        <p>Ingebouwde checks voor de kaartjes en luisterfunctie.</p>
-        <div id="tests" class="test-list"></div>
-      </section>
-    </div>
+        <p>${modus === "flashcards" ? `Woord ${index + 1} van ${lijst.length}` : `Vraag ${index + 1} van ${totaalVragen()}`}</p>
 
-    <script>
-      const woorden = [
-        { nl: "huis", fr: "maison" },
-        { nl: "kat", fr: "chat" },
-        { nl: "brood", fr: "pain" },
-        { nl: "school", fr: "école" },
-        { nl: "water", fr: "eau" },
-        { nl: "boom", fr: "arbre" },
-        { nl: "auto", fr: "voiture" },
-        { nl: "zon", fr: "soleil" },
-        { nl: "maan", fr: "lune" },
-        { nl: "boek", fr: "livre" }
-      ];
+        ${modus === "flashcards" ? renderFlashcard(huidig) : renderTestvraag(huidig)}
+      `;
+    }
 
-      const testCases = [
-        {
-          naam: "Er zijn precies 10 kaartjes",
-          check: (items) => items.length === 10,
-        },
-        {
-          naam: "Elk kaartje heeft een Nederlands woord",
-          check: (items) => items.every((item) => typeof item.nl === "string" && item.nl.trim().length > 0),
-        },
-        {
-          naam: "Elk kaartje heeft een Frans woord",
-          check: (items) => items.every((item) => typeof item.fr === "string" && item.fr.trim().length > 0),
-        },
-        {
-          naam: "Nederlandse woorden zijn uniek",
-          check: (items) => new Set(items.map((item) => item.nl)).size === items.length,
-        },
-        {
-          naam: "Franse woorden zijn uniek",
-          check: (items) => new Set(items.map((item) => item.fr)).size === items.length,
-        },
-      ];
-
-      function speakFrench(text) {
-        if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") {
-          alert("Je browser ondersteunt geen luisteroptie.");
-          return;
-        }
-
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "fr-FR";
-        utterance.rate = 0.9;
-        utterance.pitch = 1;
-        window.speechSynthesis.speak(utterance);
-      }
-
-      function maakKaart(woord) {
-        const wrap = document.createElement("div");
-        wrap.className = "card-wrap";
-
-        const card = document.createElement("div");
-        card.className = "card";
-        card.setAttribute("role", "button");
-        card.setAttribute("tabindex", "0");
-        card.setAttribute("aria-label", `Draai kaartje voor ${woord.nl}`);
-
-        card.innerHTML = `
-          <div class="face front">
-            <div class="badge-row">
-              <span class="badge">Nederlands</span>
-              <span class="hint">Klik om te draaien</span>
+    function renderFlashcard(woord) {
+      return `
+        <div class="card-wrap" onclick="draaiKaart()">
+          <div class="card ${kaartOmgedraaid ? "flipped" : ""}">
+            <div class="card-face card-front">
+              <div class="label">Nederlands</div>
+              <div class="word">${woord.nl}</div>
+              <div class="hint">Klik om om te draaien</div>
             </div>
-            <div class="word">${woord.nl}</div>
+            <div class="card-face card-back">
+              <div class="label">Frans</div>
+              <div class="word">${woord.fr}</div>
+              <button class="listen-btn" onclick="event.stopPropagation(); spreekFrans('${escapeQuote(woord.fr)}')">🔊 Luister</button>
+              <div class="hint">Klik om terug te draaien</div>
+            </div>
           </div>
-          <div class="face back">
-            <div class="badge-row">
-              <span class="badge">Français</span>
-              <span class="hint">Klik om terug te draaien</span>
-            </div>
-            <div class="word">${woord.fr}</div>
-            <div style="text-align:center;">
-              <button class="listen-btn" type="button">🔊 Luister naar ${woord.fr}</button>
-            </div>
+        </div>
+        <button class="btn btn-blue" style="margin-top:28px" onclick="volgendWoord()">Volgend woord</button>
+      `;
+    }
+
+    function renderTestvraag(huidig) {
+      const opties = maakAntwoordOpties(huidig);
+
+      return `
+        <div class="question-box">
+          <div class="label">Nederlands</div>
+          <div class="word">${huidig.nl}</div>
+          <p>Luister naar de opties en kies het juiste Franse woord.</p>
+        </div>
+
+        <div class="answers">
+          ${opties.map((optie, i) => {
+            const isGoed = optie === huidig.fr;
+            const isGekozen = gekozenAntwoord === optie;
+            let cls = "answer";
+            if (toonFeedback && isGoed) cls += " good";
+            else if (toonFeedback && isGekozen && !isGoed) cls += " bad";
+
+            return `
+              <div class="${cls}">
+                <div class="answer-inner">
+                  <button class="answer-choice" ${toonFeedback ? "disabled" : ""} onclick="kiesAntwoord('${escapeQuote(optie)}')">
+                    Optie ${i + 1}
+                  </button>
+                  <button class="listen-btn" style="margin-top:0" onclick="spreekFrans('${escapeQuote(optie)}')">🔊 Luister</button>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+
+        ${toonFeedback ? `
+          <div class="feedback ${gekozenAntwoord === huidig.fr ? "good" : "bad"}">
+            ${gekozenAntwoord === huidig.fr ? "Correct! Goed gedaan." : `Niet juist. Het goede antwoord is: ${huidig.fr}`}
           </div>
-        `;
+        ` : ""}
 
-        card.addEventListener("click", () => {
-          card.classList.toggle("flipped");
-        });
+        <div class="score-row">
+          <strong>Score: ${score}</strong>
+          <button class="btn btn-blue" ${toonFeedback ? "" : "disabled"} onclick="volgendWoord()">
+            ${index + 1 >= totaalVragen() ? "Bekijk score" : "Volgende vraag"}
+          </button>
+        </div>
+      `;
+    }
 
-        card.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            card.classList.toggle("flipped");
-          }
-        });
+    function renderEindscherm() {
+      const totaal = totaalVragen();
+      const percentage = totaal > 0 ? Math.round((score / totaal) * 100) : 0;
 
-        const luisterKnop = card.querySelector(".listen-btn");
-        luisterKnop.addEventListener("click", (event) => {
-          event.stopPropagation();
-          speakFrench(woord.fr);
-        });
+      app.innerHTML = `
+        <div class="score-badge">${percentage}%</div>
+        <h2>Test afgerond</h2>
+        <p>Thema: <strong>${themaLabels[gekozenThema]}</strong></p>
+        <p>Je score is <strong>${score} op ${totaal}</strong>.</p>
+        <div class="button-row">
+          <button class="btn btn-blue" onclick="startTest()">Opnieuw testen</button>
+          <button class="btn btn-yellow" onclick="startFlashcards()">Eerst oefenen</button>
+          <button class="btn btn-outline" onclick="terugNaarStart()">Ander thema</button>
+        </div>
+      `;
+    }
 
-        wrap.appendChild(card);
-        return wrap;
+    function maakAntwoordOpties(huidig) {
+      const fouteOpties = woorden
+        .filter(woord => woord.fr !== huidig.fr)
+        .map(woord => woord.fr);
+
+      const gekozenFouten = shuffle(fouteOpties).slice(0, 2);
+      return shuffle([huidig.fr, ...gekozenFouten]);
+    }
+
+    function kiesThema(thema) {
+      gekozenThema = thema;
+      modus = null;
+      woorden = shuffle(themaWoorden[thema]);
+      index = 0;
+      gekozenAntwoord = null;
+      toonFeedback = false;
+      score = 0;
+      testKlaar = false;
+      kaartOmgedraaid = false;
+      render();
+    }
+
+    function startFlashcards() {
+      modus = "flashcards";
+      woorden = shuffle(themaWoorden[gekozenThema]);
+      index = 0;
+      gekozenAntwoord = null;
+      toonFeedback = false;
+      score = 0;
+      testKlaar = false;
+      kaartOmgedraaid = false;
+      render();
+    }
+
+    function startTest() {
+      modus = "test";
+      woorden = shuffle(themaWoorden[gekozenThema]);
+      index = 0;
+      gekozenAntwoord = null;
+      toonFeedback = false;
+      score = 0;
+      testKlaar = false;
+      kaartOmgedraaid = false;
+      render();
+    }
+
+    function terugNaarStart() {
+      gekozenThema = null;
+      modus = null;
+      woorden = [];
+      index = 0;
+      gekozenAntwoord = null;
+      toonFeedback = false;
+      score = 0;
+      testKlaar = false;
+      kaartOmgedraaid = false;
+      render();
+    }
+
+    function draaiKaart() {
+      kaartOmgedraaid = !kaartOmgedraaid;
+      render();
+    }
+
+    function volgendWoord() {
+      const lijst = huidigeWoorden();
+      const volgendeIndex = index + 1;
+
+      if (modus === "test" && volgendeIndex >= totaalVragen()) {
+        testKlaar = true;
+        gekozenAntwoord = null;
+        toonFeedback = false;
+        render();
+        return;
       }
 
-      function renderCards() {
-        const cardsContainer = document.getElementById("cards");
-        woorden.forEach((woord) => {
-          cardsContainer.appendChild(maakKaart(woord));
-        });
+      index = volgendeIndex % lijst.length;
+      gekozenAntwoord = null;
+      toonFeedback = false;
+      kaartOmgedraaid = false;
+      render();
+    }
+
+    function kiesAntwoord(antwoord) {
+      if (toonFeedback) return;
+
+      const huidig = huidigeWoorden()[index];
+      gekozenAntwoord = antwoord;
+      toonFeedback = true;
+
+      if (antwoord === huidig.fr) {
+        score++;
       }
 
-      function renderTests() {
-        const testsContainer = document.getElementById("tests");
+      render();
+    }
 
-        testCases.forEach((test) => {
-          const geslaagd = Boolean(test.check(woorden));
-          const item = document.createElement("div");
-          item.className = "test-item";
-          item.innerHTML = `
-            <span>${test.naam}</span>
-            <span class="status ${geslaagd ? "success" : "error"}">${geslaagd ? "Geslaagd" : "Mislukt"}</span>
-          `;
-          testsContainer.appendChild(item);
-        });
+    function escapeQuote(text) {
+      return String(text)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;");
+    }
 
-        const audioBeschikbaar = "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
-        const audioItem = document.createElement("div");
-        audioItem.className = "test-item";
-        audioItem.innerHTML = `
-          <span>Browser ondersteunt luisteroptie</span>
-          <span class="status ${audioBeschikbaar ? "success" : "warning"}">${audioBeschikbaar ? "Beschikbaar" : "Niet beschikbaar"}</span>
-        `;
-        testsContainer.appendChild(audioItem);
-      }
-
-      renderCards();
-      renderTests();
-    </script>
-  </body>
+    render();
+  </script>
+</body>
 </html>
